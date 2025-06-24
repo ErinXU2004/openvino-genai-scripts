@@ -22,18 +22,6 @@ To run these notebooks:
 2. Follow instructions in each notebook.
 3. **Note**: Model weights are **excluded** from this repository due to size. Please follow instructions in the notebooks to download them if needed.
 
-## 📁 File Structure Example
-genai-scripts/
-├── flux/
-│ └── flux.1-image-generation.ipynb
-├── stable_diffusion_v3/
-│ └── stable-diffusion-v3.ipynb
-├── stable_diffusion_xl/
-│ └── stable-diffusion-xl.ipynb
-├── text_to_image/
-│ └── text-to-image-genai.ipynb
-└── README.md
-
 
 ## 🔒 Notes
 
