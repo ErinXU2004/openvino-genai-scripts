@@ -23,4 +23,25 @@ To run these notebooks:
 3. **Note**: Model weights are **excluded** from this repository due to size. Please follow instructions in the notebooks to download them if needed.
 
 ## 📁 File Structure Example
+genai-scripts/
+├── flux/
+│ └── flux.1-image-generation.ipynb
+├── stable_diffusion_v3/
+│ └── stable-diffusion-v3.ipynb
+├── stable_diffusion_xl/
+│ └── stable-diffusion-xl.ipynb
+├── text_to_image/
+│ └── text-to-image-genai.ipynb
+└── README.md
+
+
+## 🔒 Notes
+
+- Large files such as `.bin`, `.onnx`, `INT4/`, and virtual environments are excluded via `.gitignore`.
+- The goal of this repo is to organize and share the tested model scripts, not for full deployment.
+
+## 👩‍💻 Maintained by  
+Erin Xu  
+University of Michigan  
+erinhua@umich.edu
 
