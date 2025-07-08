@@ -1,0 +1,5 @@
+{
+  "python.condaPath": "/Users/hua/miniconda3/bin/conda",
+  "python.defaultInterpreterPath": "/Users/hua/miniconda3/envs/torch-gpu/bin/python"
+
+}
