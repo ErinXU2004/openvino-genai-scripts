@@ -1,8 +1,10 @@
 def main():
     import platform
     import subprocess
+    from tqdm import tqdm
     import requests
     from pathlib import Path
+    import pandas as pd
     import os
     import re
     import sys
@@ -13,30 +15,14 @@ def main():
     from cmd_helper import optimum_cli
     from gradio_helper import make_demo
     from sd3_helper import get_pipeline_options, init_pipeline_without_t5
-
+    import huggingface_hub as hf_hub
  
-    pt_pipeline_options, model_selector, load_t5, to_compress = get_pipeline_options()
-    model_id = model_selector.value
-    print(f"Selected {model_id} model")
-
-    base_model_path = Path(model_id.split("/")[-1])
-    model_path = base_model_path / ("FP16" if not to_compress.value else "INT4")
-
-    if not to_compress.value:
-        additional_args = {"weight-format": "fp16"}
-    else:
-        additional_args = {"weight-format": "int4", "group-size": "64", "ratio": "1.0"}
-
-    if not model_path.exists():
-        optimum_cli(model_id, model_path)
-
-        device = "GPU"
-
-    # Initialize pipeline
-    if not load_t5.value:
-        ov_pipe = init_pipeline_without_t5(model_path, device)
-    else:
-        ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
+    
+    model_id = "OpenVINO/stable-diffusion-v1-5-fp16-ov"
+    model_path = "stable-diffusion-v1-5-fp16-ov"
+    hf_hub.snapshot_download(model_id, local_dir=model_path) 	    
+    device = "GPU"
+    ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
 
    # print("Pipeline initialized successfully.")
 
@@ -89,7 +75,7 @@ def main():
             height=height,
             width=width,
             generator=generator,
-            callback=None
+            callback=callback
         )
         end_time = time.time()
 
