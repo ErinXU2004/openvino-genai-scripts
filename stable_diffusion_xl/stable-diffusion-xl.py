@@ -20,7 +20,7 @@ def main():
 
     model_id = "stabilityai/stable-diffusion-xl-base-1.0"
     model_dir = Path("openvino-sd-xl-base-1.0")
-    hf_hub.snapshot_download(model_id, local_dir=model_path)
+    hf_hub.snapshot_download(model_id, local_dir=model_dir)
     device = "GPU"
 
  # ==== Text-to-Image  ====
@@ -37,7 +37,15 @@ def main():
     text_latencies = []
     num_examples = 200
 
-    for i in range(num_samples):
+    metadata_path = Path("/home/erinhua/metadata.parquet")
+    if not metadata_path.exists():
+        print("❌ metadata.parquet not found. Please provide it in the script directory.")
+        return
+    
+    metadata_df = pd.read_parquet(metadata_path)
+    selected_requests = metadata_df.iloc[0:num_examples].copy()
+
+    for i,row in selected_requests.iterrows():
         prompt = row['prompt']
         clean_prompt = re.sub(r'[^\w\-_\.]', '_', prompt)[:230]
         image_path = f"{text_dir}/{clean_prompt}.png"
@@ -55,7 +63,7 @@ def main():
             num_inference_steps=steps,
             height=height,
             width=width,
-            generator=gen
+            generator=generator
         )
         end = time.time()
         text_latencies.append(end - start)
@@ -78,6 +86,7 @@ def main():
         return ov.Tensor(image_data)
 
     image2image_latencies = []
+    num_examples = 200
     for i in range(num_samples):
         init_image = Image.open(text_dir / f"cat_text2img_{i}.png")
         init_tensor = image_to_tensor(init_image)
