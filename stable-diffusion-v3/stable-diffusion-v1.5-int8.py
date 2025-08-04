@@ -13,6 +13,9 @@ def main():
     # Settings
     model_id = "OpenVINO/stable-diffusion-v1-5-int8-ov"
     model_path = "stable-diffusion-v1-5-int8-ov"
+    hf_hub.snapshot_download(model_id, local_dir=model_path) 
+    ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
+    
     device = "GPU"
     height = 512
     width = 512
@@ -20,9 +23,6 @@ def main():
     num_inference_steps = 28
     guidance_scale = 5
     generator = ov_genai.TorchGenerator(seed)
-
-    # Create pipeline
-    ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
 
     # Create folders
     gen_dir = Path("int8_generated_images")
