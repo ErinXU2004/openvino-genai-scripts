@@ -25,8 +25,8 @@ def main():
     generator = ov_genai.TorchGenerator(seed)
 
     # Create folders
-    gen_dir = Path("int8_generated_images")
-    gt_dir = Path("int8_groundtruth_images")
+    gen_dir = Path("./v1.5_int8_generated_images")
+    gt_dir = Path("./v1.5_int8_groundtruth_images")
     gen_dir.mkdir(exist_ok=True)
     gt_dir.mkdir(exist_ok=True)
 
