@@ -73,13 +73,12 @@ def main():
 
         start_time = time.time()
         result = ov_pipe.generate(
-            prompt=prompt,
+            prompt,
             num_inference_steps=num_inference_steps,
-            guidance_scale=guidance_scale,
+            generator=random_generator,
+            callback=callback,
             height=height,
-            width=width,
-            generator=generator,
-            callback=callback
+            width=width
         )
         end_time = time.time()
         pbar.close()
