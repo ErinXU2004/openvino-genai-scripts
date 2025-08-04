@@ -9,6 +9,7 @@ def main():
     from PIL import Image
     import openvino_genai as ov_genai
     from datasets import load_dataset
+    import huggingface_hub as hf_hub
 
     # Settings
     model_id = "OpenVINO/stable-diffusion-v1-5-int8-ov"
