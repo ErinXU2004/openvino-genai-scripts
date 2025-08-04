@@ -14,13 +14,15 @@ def main():
     from cmd_helper import optimum_cli
     from gradio_helper import make_demo
     from datasets import load_dataset
+    import huggingface_hub as hf_hub
 
 
-    model_dir = ""
+    model_id = "OpenVINO/FLUX.1-schnell-fp16-ov"
+    model_path = "FLUX.1-schnell-fp16-ov"
    # model_dir = "/home/erinhua/openvino-genai-scripts/FLUX.1-schnell-int4-ov"
     # Device and pipeline
     device = "GPU"
-    ov_pipe = ov_genai.Text2ImagePipeline(model_dir, device=device)
+    ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
 
     # Inference settings
     # prompt = "A cat holding a sign that says hello OpenVINO"
