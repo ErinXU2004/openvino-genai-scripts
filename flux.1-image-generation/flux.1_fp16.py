@@ -25,8 +25,8 @@ def main():
     num_inference_steps = 4
 
     # Create folders
-    gen_dir = Path("./flux_int4_generated_images")
-    gt_dir = Path("./flux_int4_groundtruth_images")
+    gen_dir = Path("./flux_fp16_generated_images")
+    gt_dir = Path("./flux_fp16_groundtruth_images")
     gen_dir.mkdir(exist_ok=True)
     gt_dir.mkdir(exist_ok=True)
 
