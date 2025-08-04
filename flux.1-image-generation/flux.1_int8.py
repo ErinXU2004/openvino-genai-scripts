@@ -36,7 +36,7 @@ def main():
 
     latencies = []
     count = 0
-    max_samples = 1000
+    max_samples = 500
 
     for row in tqdm(ds, desc="📦 Processing dataset"):
         if count >= max_samples:
