@@ -12,8 +12,8 @@ def main():
     import huggingface_hub as hf_hub
 
     # Settings
-    model_id = "OpenVINO/stable-diffusion-v1-5-int8-ov"
-    model_path = "stable-diffusion-v1-5-int8-ov"
+    model_id = "OpenVINO/stable-diffusion-v1-5-fp16-ov"
+    model_path = "stable-diffusion-v1-5-fp16-ov"
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
     ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
     
