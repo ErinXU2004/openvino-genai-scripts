@@ -15,7 +15,7 @@ def main():
     model_id = "OpenVINO/FLUX.1-schnell-int4-ov""
     model_path = "FLUX.1-schnell-int4-ov"
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
-    
+    generator = ov_genai.TorchGenerator(seed)
     device = "GPU"
     ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
 
@@ -75,7 +75,7 @@ def main():
         result = ov_pipe.generate(
             prompt,
             num_inference_steps=num_inference_steps,
-            generator=random_generator,
+            generator=generator,
             callback=callback,
             height=height,
             width=width
