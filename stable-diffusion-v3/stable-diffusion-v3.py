@@ -1,3 +1,4 @@
+
 def main():
     import platform
     import subprocess
@@ -37,7 +38,7 @@ def main():
     generator = ov_genai.TorchGenerator(seed)
 
     print("Pipeline settings")
-    print(f"Input text: {prompt}")
+#    print(f"Input text: {prompt}")
     print(f"Image size: {height} x {width}")
     print(f"Seed: {seed}")
     print(f"Number of steps: {num_inference_steps}")
@@ -53,11 +54,11 @@ def main():
         print("❌ metadata.parquet not found. Please provide it in the script directory.")
         return
     
-    ds = load_dataset("lmms-lab/COCO-Caption2017", split="val")
+    ds = load_dataset("lmms-lab/COCO-Caption2017", split="test")
     selected = ds.select(range(num_examples))
     for i, row in enumerate(selected):
         prompt = row.get("prompt") or row.get("caption")
-        clean_prompt = safe_filename(prompt)
+        clean_prompt = re.sub(r'[^\w\-_\.]', '_', prompt)[:230]
         image_path = f"{images_directory}/{clean_prompt}.png"
 
         # 🟢 Create new progress bar for each request
