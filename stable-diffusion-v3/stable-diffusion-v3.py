@@ -43,7 +43,7 @@ def main():
     print(f"Number of steps: {num_inference_steps}")
 
 
-    images_directory = './SDv3_generated_images'
+    images_directory = './SDv3_generated_images_int8'
     os.makedirs(images_directory, exist_ok=True)
     latencies = []
     num_examples = 200
