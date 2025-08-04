@@ -17,8 +17,8 @@ def main():
     from sd3_helper import get_pipeline_options, init_pipeline_without_t5
     import huggingface_hub as hf_hub
  
-    
-    model_id = "OpenVINO/stable-diffusion-v1-5-fp16-ov"
+    model_id = "/home/erinhua/openvino-genai-scripts/FLUX.1-schnell-int4-ov"
+   # model_id = "OpenVINO/stable-diffusion-v1-5-fp16-ov"
     model_path = "stable-diffusion-v1-5-fp16-ov"
     hf_hub.snapshot_download(model_id, local_dir=model_path) 	    
     device = "GPU"
