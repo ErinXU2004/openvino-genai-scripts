@@ -15,9 +15,9 @@ def main():
     model_id = "OpenVINO/stable-diffusion-v1-5-fp16-ov"
     model_path = "stable-diffusion-v1-5-fp16-ov"
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
+    device = "GPU"
     ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
     
-    device = "GPU"
     height = 512
     width = 512
     seed = 42
@@ -37,7 +37,7 @@ def main():
 
     latencies = []
     count = 0
-    max_samples = 1000
+    max_samples = 500
 
     for row in tqdm(ds, desc="📦 Processing dataset"):
         if count >= max_samples:
