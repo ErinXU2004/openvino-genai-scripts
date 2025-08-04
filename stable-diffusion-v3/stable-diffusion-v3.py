@@ -16,6 +16,7 @@ def main():
     from gradio_helper import make_demo
     from sd3_helper import get_pipeline_options, init_pipeline_without_t5
     import huggingface_hub as hf_hub
+    from datasets import load_dataset
  
     model_id = "/home/erinhua/openvino-genai-scripts/FLUX.1-schnell-int4-ov"
    # model_id = "OpenVINO/stable-diffusion-v1-5-fp16-ov"
@@ -27,7 +28,7 @@ def main():
    # print("Pipeline initialized successfully.")
 
     # Inference settings
-    prompt = "A raccoon trapped inside a glass jar full of colorful candies, the background is steamy with vivid colors"
+    # prompt = "A raccoon trapped inside a glass jar full of colorful candies, the background is steamy with vivid colors"
     height = 512
     width = 512
     seed = 42
@@ -52,11 +53,13 @@ def main():
         print("❌ metadata.parquet not found. Please provide it in the script directory.")
         return
     
+    ds = load_dataset("lmms-lab/COCO-Caption2017", split="train")
+    selected = ds.select(range(num_examples))
     metadata_df = pd.read_parquet(metadata_path)
     selected_requests = metadata_df.iloc[0:num_examples].copy()
-    for i, row in selected_requests.iterrows():
-        prompt = row['prompt']
-        clean_prompt = re.sub(r'[^\w\-_\.]', '_', prompt)[:230]
+    for row in selected::
+        prompt = row.get('prompt') or row['captions'][0]
+        clean_prompt = safe_filename(prompt)
         image_path = f"{images_directory}/{clean_prompt}.png"
 
         # 🟢 Create new progress bar for each request
