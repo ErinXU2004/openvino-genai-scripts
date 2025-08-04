@@ -53,12 +53,10 @@ def main():
         print("❌ metadata.parquet not found. Please provide it in the script directory.")
         return
     
-    ds = load_dataset("lmms-lab/COCO-Caption2017", split="train")
+    ds = load_dataset("lmms-lab/COCO-Caption2017", split="val")
     selected = ds.select(range(num_examples))
-    metadata_df = pd.read_parquet(metadata_path)
-    selected_requests = metadata_df.iloc[0:num_examples].copy()
-    for row in selected::
-        prompt = row.get('prompt') or row['captions'][0]
+    for i, row in enumerate(selected):
+        prompt = row.get("prompt") or row.get("caption")
         clean_prompt = safe_filename(prompt)
         image_path = f"{images_directory}/{clean_prompt}.png"
 
