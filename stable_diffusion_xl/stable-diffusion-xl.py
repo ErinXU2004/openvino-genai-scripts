@@ -19,12 +19,12 @@ def main():
     from gradio_helper import make_demo_sd_xl_text2image
     from datasets import load_dataset
 
-    model_dir = "/home/erinhua/openvino-genai-scripts/FLUX.1-schnell-int4-ov"
+    model_dir = Path("openvino-sd-xl-base-1.0")
     device = "GPU"
 
  # ==== Text-to-Image  ====
     text2image_pipe = ov_genai.Text2ImagePipeline(model_dir, device=device)
-    prompt = "cute cat 4k, high-res, masterpiece, best quality, full hd, extremely detailed,  soft lighting, dynamic angle, 35mm"
+  #  prompt = "cute cat 4k, high-res, masterpiece, best quality, full hd, extremely detailed,  soft lighting, dynamic angle, 35mm"
     height=512
     width=512
     steps=25
