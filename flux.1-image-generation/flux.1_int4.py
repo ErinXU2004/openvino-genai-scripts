@@ -19,12 +19,10 @@ def main():
     device = "GPU"
     ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
 
-    height = 512
-    width = 512
+    height = 256
+    width = 256
     seed = 42
-    num_inference_steps = 28
-    guidance_scale = 5
-    generator = ov_genai.TorchGenerator(seed)
+    num_inference_steps = 4
 
     # Create folders
     gen_dir = Path("./flux_int4_generated_images")
