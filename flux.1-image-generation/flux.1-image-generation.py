@@ -16,8 +16,8 @@ def main():
     from datasets import load_dataset
 
 
-
-    model_dir = "/home/erinhua/openvino-genai-scripts/FLUX.1-schnell-int4-ov"
+    model_dir = "OpenVINO/stable-diffusion-v1-5-fp16-ov"
+   # model_dir = "/home/erinhua/openvino-genai-scripts/FLUX.1-schnell-int4-ov"
     # Device and pipeline
     device = "GPU"
     ov_pipe = ov_genai.Text2ImagePipeline(model_dir, device=device)
