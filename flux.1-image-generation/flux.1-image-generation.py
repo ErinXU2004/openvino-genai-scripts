@@ -23,7 +23,7 @@ def main():
     ov_pipe = ov_genai.Text2ImagePipeline(model_dir, device=device)
 
     # Inference settings
-    prompt = "A cat holding a sign that says hello OpenVINO"
+    # prompt = "A cat holding a sign that says hello OpenVINO"
     height = 256
     width = 256
     seed = 42
@@ -47,15 +47,10 @@ def main():
     latencies = []
     num_examples = 200
 
-    metadata_path = Path("/home/erinhua/metadata.parquet")
-    if not metadata_path.exists():
-        print("❌ metadata.parquet not found. Please provide it in the script directory.")
-        return
     ds = load_dataset("lmms-lab/COCO-Caption2017", split="train")
-    metadata_df = pd.read_parquet(metadata_path)
-    selected_requests = ds.select(range(num_examples))
+    selected = ds.select(range(num_examples))
     
-    for i, row in selected_requests.iterrows():
+    for row in selected:
         prompt = row.get('prompt') or row['captions'][0]
         clean_prompt = safe_filename(prompt)
         image_path = f"{images_directory}/{clean_prompt}.png"
