@@ -19,7 +19,7 @@ def main():
     from gradio_helper import make_demo_sd_xl_text2image
     
 
-    model_dir = Path("openvino-sd-xl-base-1.0")
+    model_dir = "/home/erinhua/openvino-genai-scripts/FLUX.1-schnell-int4-ov"
     device = "GPU"
 
  # ==== Text-to-Image  ====
