@@ -54,7 +54,7 @@ def main():
         print("❌ metadata.parquet not found. Please provide it in the script directory.")
         return
     
-    ds = load_dataset("lmms-lab/COCO-Caption2017", split="test")
+    ds = load_dataset("lmms-lab/COCO-Caption2017", split="val")
     selected = ds.select(range(num_examples))
     for i, row in enumerate(selected):
         prompt = row.get("prompt") or row.get("caption")
