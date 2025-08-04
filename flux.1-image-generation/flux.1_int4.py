@@ -12,7 +12,7 @@ def main():
     import huggingface_hub as hf_hub
 
     # Settings
-    model_id = "OpenVINO/FLUX.1-schnell-int4-ov""
+    model_id = "OpenVINO/FLUX.1-schnell-int4-ov"
     model_path = "FLUX.1-schnell-int4-ov"
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
     generator = ov_genai.TorchGenerator(seed)
