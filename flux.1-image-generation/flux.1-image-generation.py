@@ -13,7 +13,7 @@ def main():
     from notebook_utils import collect_telemetry
     from cmd_helper import optimum_cli
     from gradio_helper import make_demo
-
+    from datasets import load_dataset
 
 
 
@@ -51,12 +51,13 @@ def main():
     if not metadata_path.exists():
         print("❌ metadata.parquet not found. Please provide it in the script directory.")
         return
-
+    ds = load_dataset("lmms-lab/COCO-Caption2017", split="train")
     metadata_df = pd.read_parquet(metadata_path)
-    selected_requests = metadata_df.iloc[0:num_examples].copy()
+    selected_requests = ds.select(range(num_examples))
+    
     for i, row in selected_requests.iterrows():
-        prompt = row['prompt']
-        clean_prompt = re.sub(r'[^\w\-_\.]', '_', prompt)[:230]
+        prompt = row.get('prompt') or row['captions'][0]
+        clean_prompt = safe_filename(prompt)
         image_path = f"{images_directory}/{clean_prompt}.png"
 
         # 🟢 Create new progress bar for each request
