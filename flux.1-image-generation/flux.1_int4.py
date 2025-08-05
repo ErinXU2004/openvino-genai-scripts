@@ -17,27 +17,26 @@ def main():
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
     device = "GPU"
     ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
-
     height = 256
     width = 256
     seed = 42
     num_inference_steps = 4
     generator = ov_genai.TorchGenerator(seed)
-
+    print("Setting Done")
     # Create folders
     gen_dir = Path("./flux_int4_generated_images")
     gt_dir = Path("./flux_int4_groundtruth_images")
     gen_dir.mkdir(exist_ok=True)
     gt_dir.mkdir(exist_ok=True)
-
+    
     # Load dataset
     print("🔍 Loading dataset...")
     ds = load_dataset("phiyodr/coco2017", split="train")
-
+    
     latencies = []
     count = 0
-    max_samples = 1000
-
+    max_samples = 300
+    print("Generation begins")
     for row in tqdm(ds, desc="📦 Processing dataset"):
         if count >= max_samples:
             break
@@ -87,6 +86,7 @@ def main():
         latencies.append(latency)
 
         final_image = Image.fromarray(result.data[0])
+        final_image = final_image.resize((640, 480), Image.LANCZOS)
         final_image.save(gen_image_path)
 
         count += 1
