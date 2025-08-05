@@ -17,8 +17,8 @@ def main():
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
     device = "GPU"
     ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
-    height = 256
-    width = 256
+    height = 480
+    width = 640
     seed = 42
     num_inference_steps = 4
     generator = ov_genai.TorchGenerator(seed)
@@ -86,13 +86,17 @@ def main():
         latencies.append(latency)
 
         final_image = Image.fromarray(result.data[0])
-        final_image = final_image.resize((640, 480), Image.LANCZOS)
+        #final_image = final_image.resize((640, 480), Image.LANCZOS)
         final_image.save(gen_image_path)
 
         count += 1
 
     print(f"\n✅ Done! Generated {count} images.")
     print(f"🕒 Avg Latency: {sum(latencies) / len(latencies):.2f} seconds")
+
+
+if __name__ == "__main__":
+    main()
 
 
 if __name__ == "__main__":
