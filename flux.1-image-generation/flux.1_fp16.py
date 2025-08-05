@@ -15,7 +15,6 @@ def main():
     model_id = "OpenVINO/FLUX.1-schnell-fp16-ov"
     model_path = "FLUX.1-schnell-fp16-ov"
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
-    generator = ov_genai.TorchGenerator(seed)
     device = "GPU"
     ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
 
@@ -23,6 +22,7 @@ def main():
     width = 256
     seed = 42
     num_inference_steps = 4
+    generator = ov_genai.TorchGenerator(seed)
 
     # Create folders
     gen_dir = Path("./flux_fp16_generated_images")
