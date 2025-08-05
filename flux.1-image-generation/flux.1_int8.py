@@ -36,7 +36,7 @@ def main():
 
     latencies = []
     count = 0
-    max_samples = 500
+    max_samples = 300
 
     for row in tqdm(ds, desc="📦 Processing dataset"):
         if count >= max_samples:
@@ -87,6 +87,7 @@ def main():
         latencies.append(latency)
 
         final_image = Image.fromarray(result.data[0])
+        final_image = final_image.resize((640, 480), Image.LANCZOS)
         final_image.save(gen_image_path)
 
         count += 1
