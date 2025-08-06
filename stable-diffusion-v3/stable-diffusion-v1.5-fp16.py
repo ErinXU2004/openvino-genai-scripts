@@ -37,15 +37,15 @@ def main():
 
     latencies = []
     count = 0
-    max_samples = 500
+    max_samples = 300
 
     for row in tqdm(ds, desc="📦 Processing dataset"):
         if count >= max_samples:
             break
 
         # Check resolution
-        if row["width"] != 640 or row["height"] != 480:
-            continue
+        #if row["width"] != 640 or row["height"] != 480:
+        #    continue
 
         # Check caption
         captions = row.get("captions")
