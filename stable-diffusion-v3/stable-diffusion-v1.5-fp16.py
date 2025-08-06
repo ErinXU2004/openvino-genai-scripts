@@ -12,16 +12,17 @@ def main():
     import huggingface_hub as hf_hub
 
     # Settings
-    model_id = "OpenVINO/stable-diffusion-v1-5-int8-ov"
-    model_path = "stable-diffusion-v1-5-int8-ov"
+    model_id = "OpenVINO/stable-diffusion-v1-5-fp16-ov"
+    model_path = "stable-diffusion-v1-5-fp16-ov"
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
     device = "GPU"
+    ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
+    
     height = 512
     width = 512
     seed = 42
     num_inference_steps = 28
     guidance_scale = 5
-    ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
     generator = ov_genai.TorchGenerator(seed)
 
     # Create folders
@@ -36,8 +37,7 @@ def main():
 
     latencies = []
     count = 0
-    max_samples = 300
-
+    max_samples = 500
 
     for row in tqdm(ds, desc="📦 Processing dataset"):
         if count >= max_samples:
