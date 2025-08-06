@@ -2,8 +2,10 @@ import os
 from pytorch_fid import fid_score
 
 # Paths to the two directories
-path1 = "./flux_int4_groundtruth_images"
-path2 = "flux_int4_generated_images"
+#path1 = "./flux_int4_groundtruth_images"
+path1 = "./stable-diffusion-v3/v1.5_int8_groundtruth_images"
+path2 = "./stable-diffusion-v3/v1.5_int8_generated_images"
+#path2 = "flux_int4_generated_images"
 path3 = ""
 
 # Check if directories exist
@@ -15,6 +17,6 @@ if not os.path.exists(path2):
 # Calculate FID score
 fid = fid_score.calculate_fid_given_paths([path1, path2], batch_size=50, device="cpu", dims=2048)
 print(f"FID Score: {fid}")
-fid = fid_score.calculate_fid_given_paths([path3, path2], batch_size=50, device="cpu", dims=2048)
-print(f"FID Score: {fid}")
+#fid = fid_score.calculate_fid_given_paths([path3, path2], batch_size=50, device="cpu", dims=2048)
+#print(f"FID Score: {fid}")
 
