@@ -25,9 +25,9 @@ def main():
     print("Setting Done")
     # Create folders
     gen_dir = Path("./flux_int4_generated_images")
-    gt_dir = Path("./flux_int4_groundtruth_images")
+    #gt_dir = Path("./flux_int4_groundtruth_images")
     gen_dir.mkdir(exist_ok=True)
-    gt_dir.mkdir(exist_ok=True)
+    #gt_dir.mkdir(exist_ok=True)
     
     # Load dataset
     print("🔍 Loading dataset...")
@@ -42,8 +42,8 @@ def main():
             break
 
         # Check resolution
-        if row["width"] != 256 or row["height"] != 256:
-            continue
+        #if row["width"] != 256 or row["height"] != 256:
+        #    continue
 
         # Check caption
         captions = row.get("captions")
@@ -54,13 +54,13 @@ def main():
         clean_prompt = re.sub(r"[^\w\-_\.]", "_", prompt)[:100]
 
         gen_image_path = gen_dir / f"{clean_prompt}_{count}.png"
-        gt_image_path = gt_dir / f"{clean_prompt}_{count}.jpg"
+        #gt_image_path = gt_dir / f"{clean_prompt}_{count}.jpg"
 
         # Download groundtruth image
-        image_url = f"http://images.cocodataset.org/train2017/{str(row['image_id']).zfill(12)}.jpg"
-        response = requests.get(image_url)
-        with open(gt_image_path, "wb") as f:
-            f.write(response.content)
+        #image_url = f"http://images.cocodataset.org/train2017/{str(row['image_id']).zfill(12)}.jpg"
+        #response = requests.get(image_url)
+        #with open(gt_image_path, "wb") as f:
+           # f.write(response.content)
 
         # Generate image
         pbar = tqdm(total=num_inference_steps, desc=f"🖼️ Generating {count}")
@@ -86,7 +86,6 @@ def main():
         latencies.append(latency)
 
         final_image = Image.fromarray(result.data[0])
-        #final_image = final_image.resize((640, 480), Image.LANCZOS)
         final_image.save(gen_image_path)
 
         count += 1
