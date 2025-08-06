@@ -17,8 +17,8 @@ def main():
     hf_hub.snapshot_download(model_id, local_dir=model_path) 
     device = "GPU"
     ov_pipe = ov_genai.Text2ImagePipeline(model_path, device=device)
-    height = 480
-    width = 640
+    height = 256
+    width = 256
     seed = 42
     num_inference_steps = 4
     generator = ov_genai.TorchGenerator(seed)
@@ -42,7 +42,7 @@ def main():
             break
 
         # Check resolution
-        if row["width"] != 640 or row["height"] != 480:
+        if row["width"] != 256 or row["height"] != 256:
             continue
 
         # Check caption
