@@ -19,7 +19,7 @@ def main():
     from gradio_helper import make_demo_sd_xl_text2image
     from datasets import load_dataset
 
-    model_dir = Path("openvino-sd-xl-base-1.0")
+    model_dir = Path("ov_sdxl")
     device = "GPU"
 
  # ==== Text-to-Image  ====
@@ -30,44 +30,60 @@ def main():
     steps=25
     generator=ov_genai.TorchGenerator(903512)
 
-    text_dir = Path('./generated_text2image')
+    gen_dir = Path('./sdxl_int8_images')
     os.makedirs(text_dir, exist_ok=True)
 
-    text_latencies = []
-    num_examples = 200
+    latencies = []
+    num_examples = 300
+    count = 0
 
-    ds = load_dataset("lmms-lab/COCO-Caption2017", split="train")
-    selected = ds.select(range(num_examples))
+    # Load dataset
+    print("🔍 Loading dataset...")
+    ds = load_dataset("phiyodr/coco2017", split="train")
 
 
-    for row in selected:
-        prompt = row.get('prompt') or row['captions'][0]
-        clean_prompt = safe_filename(prompt)
-        image_path = f"{text_dir}/{clean_prompt}.png"
+    for row in tqdm(ds, desc="📦 Processing dataset"):
+        if count >= max_samples:
+            break
+            
+            captions = row.get("captions")
+            if not captions or not isinstance(captions, list) or not captions[0]:
+                continue
+                
+            prompt = captions[0]
+            clean_prompt = re.sub(r"[^\w\-_\.]", "_", prompt)[:100]
+            gen_image_path = gen_dir / f"{clean_prompt}_{count}.png"
+            
+            pbar = tqdm(total=num_inference_steps, desc=f"🖼️ Generating {count}")
 
-        # 🟢 Create new progress bar for each request
-        pbar = tqdm(total=steps)
+            def callback(step, num_steps, latent):
+                pbar.update(1)
+                sys.stdout.flush()
+                return False
+                
+            start = time.time()
+            text_result = text2image_pipe.generate(
+                prompt,
+                num_inference_steps=steps,
+                height=height,
+                width=width,
+                generator=generator,
+                callback=callback
+            )
+            end_time = time.time()
+            pbar.close()
+    
+            latency = end_time - start_time
+            latencies.append(latency)
+    
+            final_image = Image.fromarray(result.data[0])
+            final_image.save(gen_image_path)
+    
+            count += 1
 
-        def callback(step, num_steps, latent):
-            pbar.update(1)
-            sys.stdout.flush()
-            return False
-        start = time.time()
-        text_result = text2image_pipe.generate(
-            prompt,
-            num_inference_steps=steps,
-            height=height,
-            width=width,
-            generator=generator,
-            callback=callback
-        )
-        end = time.time()
-        text_latencies.append(end - start)
-        image = Image.fromarray(text_result.data[0])
-        image.save(image_path)
-        pbar.close()
+         print(f"\n✅ Done! Generated {count} images.")
+         print(f"🕒 Avg Latency: {sum(latencies) / len(latencies):.2f} seconds")
 
-#    print(f"✅ Text2Image done. Avg latency: {sum(text_latencies)/len(text_latencies):.2f}s")
 
 
 if __name__ == "__main__":
