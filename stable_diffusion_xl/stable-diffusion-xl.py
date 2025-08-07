@@ -36,54 +36,48 @@ def main():
     latencies = []
     num_examples = 300
     count = 0
-
-    # Load dataset
-    print("🔍 Loading dataset...")
-    ds = load_dataset("phiyodr/coco2017", split="train")
-
-
+    
     for row in tqdm(ds, desc="📦 Processing dataset"):
         if count >= max_samples:
             break
-            
-            captions = row.get("captions")
-            if not captions or not isinstance(captions, list) or not captions[0]:
-                continue
-                
-            prompt = captions[0]
-            clean_prompt = re.sub(r"[^\w\-_\.]", "_", prompt)[:100]
-            gen_image_path = gen_dir / f"{clean_prompt}_{count}.png"
-            
-            pbar = tqdm(total=num_inference_steps, desc=f"🖼️ Generating {count}")
-
-            def callback(step, num_steps, latent):
-                pbar.update(1)
-                sys.stdout.flush()
-                return False
-                
-            start = time.time()
-            text_result = text2image_pipe.generate(
-                prompt,
-                num_inference_steps=steps,
-                height=height,
-                width=width,
-                generator=generator,
-                callback=callback
-            )
-            end_time = time.time()
-            pbar.close()
     
-            latency = end_time - start_time
-            latencies.append(latency)
+        captions = row.get("captions")
+        if not captions or not isinstance(captions, list) or not captions[0]:
+            continue
     
-            final_image = Image.fromarray(result.data[0])
-            final_image.save(gen_image_path)
+        prompt = captions[0]
+        clean_prompt = re.sub(r"[^\w\-_\.]", "_", prompt)[:100]
+        gen_image_path = gen_dir / f"{clean_prompt}_{count}.png"
     
-            count += 1
-
-         print(f"\n✅ Done! Generated {count} images.")
-         print(f"🕒 Avg Latency: {sum(latencies) / len(latencies):.2f} seconds")
-
+        pbar = tqdm(total=num_inference_steps, desc=f"🖼️ Generating {count}")
+    
+        def callback(step, num_steps, latent):
+            pbar.update(1)
+            sys.stdout.flush()
+            return False
+    
+        start_time = time.time()
+        result = text2image_pipe.generate(
+            prompt,
+            num_inference_steps=steps,
+            height=height,
+            width=width,
+            generator=generator,
+            callback=callback
+        )
+        end_time = time.time()
+        pbar.close()
+    
+        latency = end_time - start_time
+        latencies.append(latency)
+    
+        final_image = Image.fromarray(result.data[0])
+        final_image.save(gen_image_path)
+    
+        count += 1
+    
+    print(f"\n✅ Done! Generated {count} images.")
+    print(f"🕒 Avg Latency: {sum(latencies) / len(latencies):.2f} seconds")
 
 
 if __name__ == "__main__":
