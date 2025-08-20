@@ -59,10 +59,9 @@ def main():
         # Generate image
         pbar = tqdm(total=num_inference_steps, desc=f"🖼️ Generating {count}")
 
-        def callback(step, num_steps, latent):
-            pbar.update(1)
-            sys.stdout.flush()
-            return False
+        def on_step_end(pipe,step: int, timestep: int, callback_kwargs: dict):
+                pbar.update(1)
+                return callback_kwargs
 
         start_time = time.time()
         result = pipe(
@@ -73,7 +72,7 @@ def main():
             height=height,
             width=width,
             generator=generator,
-            callback=callback
+            callback_on_step_end=on_step_end,
         )
         end_time = time.time()
         pbar.close()
