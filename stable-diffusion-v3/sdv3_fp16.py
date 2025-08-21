@@ -27,7 +27,7 @@ def main():
         model_id,
         torch_dtype=torch.float16
     )
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    device = "gpu"
     pipe = pipe.to(device)
     generator = torch.Generator(device=device).manual_seed(seed)
 
