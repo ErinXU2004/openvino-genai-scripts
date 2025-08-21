@@ -54,7 +54,7 @@ def main():
         prompt = captions[0]
         clean_prompt = re.sub(r"[^\w\-_\.]", "_", prompt)[:100]
 
-        gen_image_path = gen_dir / f"{clean_prompt}_{count}.png"        
+        gen_image_path = out_dir / f"{clean_prompt}_{count}.png"        
 
         # Generate image
         pbar = tqdm(total=num_inference_steps, desc=f"🖼️ Generating {count}")
